@@ -2,9 +2,9 @@ import unittest
 import numpy as np
 from src.KnapsackIndividual import Individual
 from src.KnapsackItem import Item
+from src.FunctionOptimizerIndividual import FunctionMinimizer2DIndividual
 
-
-class TestIndividualMethods(unittest.TestCase):
+class TestKnapsackIndividualMethods(unittest.TestCase):
 
     def setUp(self):
         self.items = list(set([(np.random.randint(1,30),np.random.randint(1,30)) for x in range(500)]))
@@ -31,4 +31,29 @@ class TestIndividualMethods(unittest.TestCase):
         i2 = self.individuals[9]
         i0 = i1.breed(i2)
 
+
+
+class TestNumericalIndividualMethods(unittest.TestCase):
+
+    def setUp(self):
+        def opt_func(x,y):
+            return x ** 2 - 50 * x + y ** 2
+        self.individuals = [FunctionMinimizer2DIndividual(opt_func,np.random.randint(-100,100),np.random.randint(-100,100)) for x in range(20)]
+
+    def test_mutation(self):
+        mean_value_x = np.mean([x.x for x in self.individuals])
+        mean_value_y = np.mean([x.y for x in self.individuals])
+        for i in range(1000):
+            for ind in self.individuals:
+                ind.mutate(0.99)
+        mean_value_x_mut = np.mean([x.x for x in self.individuals])
+        mean_value_y_mut = np.mean([x.y for x in self.individuals])
+        self.assertNotEqual(mean_value_x,mean_value_x_mut)
+        self.assertNotEqual(mean_value_y,mean_value_y_mut)
+
+
+    def test_breed(self):
+        i1 = self.individuals[7]
+        i2 = self.individuals[9]
+        i0 = i1.breed(i2)
 

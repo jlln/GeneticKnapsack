@@ -26,11 +26,11 @@ def breed_population(population,mating_rate,litter_size,mutation_prob,generation
         matings.append(Mating(partner_a,partner_b,children,generation))
     pop_size = len(population)
     combined_population = population + children
-    combined_population = [x for x in combined_population if x.total_weight() < 101]
+    combined_population = [x for x in combined_population if x.is_legal()]
     combined_population = sorted(combined_population,key = lambda x: x.fitness_score(),reverse=True)
     return combined_population[:pop_size],matings
 
-def evolve_population(population,mating_rate,litter_size,step,mutation_prob):
+def evolve_knapsack_population(population,mating_rate,litter_size,step,mutation_prob):
     generations = []
     population_record = [population]
     mean_values = []
@@ -42,7 +42,7 @@ def evolve_population(population,mating_rate,litter_size,step,mutation_prob):
     matings = []
     with open("output_ga.txt",'w') as outfile:
         for generation in range(step):
-            legal_population = [x for x in population if x.total_weight() < 101]
+            legal_population = [x for x in population if x.is_legal()]
             print("Generation {}".format(generation))
             print( "{}% Population Legal".format(len(legal_population)/len(population) * 100))
             print("Mean Fitness: {}".format(np.mean([x.fitness_score() for x in population])))
@@ -62,3 +62,25 @@ def evolve_population(population,mating_rate,litter_size,step,mutation_prob):
             mean_fitness_scores = mean_fitness_scores + [np.mean([x.fitness_score() for x in population])]
             mean_values.append(np.mean([x.total_value() for x in population]))
     return generations,mean_values,weights,values,fitness_scores,mean_fitness_scores,population,best_of_generations,matings,population_record
+
+
+def evolve_numeric_optimizer_population(population,mating_rate,litter_size,step,mutation_prob):
+    generations = []
+    population_record = [population]
+    xs = []
+    ys = []
+    fitness_scores = []
+    mean_fitness_scores = []
+    best_of_generations = []
+    with open("output_ga.txt",'w') as outfile:
+        for generation in range(step):
+            print("Generation {}".format(generation))
+            most_fit = sorted(population,key=lambda x: x.fitness_score())[-1]
+            population,mating_set = breed_population(population,mating_rate = mating_rate,litter_size=litter_size,mutation_prob=mutation_prob,generation=generation)
+            population_record.append(population)
+            outfile.write(most_fit.report() + "\n")
+            best_of_generations.append(most_fit)
+            generations.append(generation)
+            fitness_scores = fitness_scores + [x.fitness_score() for x in population]
+            mean_fitness_scores = mean_fitness_scores + [np.mean([x.fitness_score() for x in population])]
+    return generations,xs,ys,fitness_scores,mean_fitness_scores,population,best_of_generations,population_record

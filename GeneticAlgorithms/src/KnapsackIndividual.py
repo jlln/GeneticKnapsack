@@ -17,6 +17,9 @@ class Individual:
         self.item_pool = item_pool
         self.max_weight = max_weight
 
+    def is_legal(self):
+        return self.total_weight() < self.max_weight
+
     def total_weight(self):
         return np.sum([x.weight for x in self.items])
 
