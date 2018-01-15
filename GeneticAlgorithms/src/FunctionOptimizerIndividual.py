@@ -1,6 +1,7 @@
 import numpy as np
+from src.Evolution import Individual
 
-class FunctionMinimizer2DIndividual:
+class FunctionMinimizer2DIndividual(Individual):
     def __init__(self,function,x,y):
         self.x = x
         self.y = y

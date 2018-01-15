@@ -1,6 +1,12 @@
 import numpy as np
+from src.Evolution import Individual
 
-class Individual:
+class KnapsackItem:
+    def __init__(self,weight,value):
+        self.value = value
+        self.weight = weight
+
+class KnapsackIndividual(Individual):
     def fitness_score(self):
         if self.total_weight() > self.max_weight:
             scaling_extra = self.total_weight() - (self.max_weight + 1)  # penalize being overweight
@@ -54,6 +60,6 @@ class Individual:
 
     def breed(self, partner):
         combined_genes = list(set(list(self.items) + list(partner.items)))
-        offspring = Individual(combined_genes, self.max_weight)
+        offspring = KnapsackIndividual(combined_genes, self.max_weight)
         offspring.mutate(0.05)
         return offspring

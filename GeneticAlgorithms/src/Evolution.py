@@ -11,7 +11,33 @@ class Mating:
         self.children = children
 
 
+class Individual:
+    def is_legal(self):
+        #Boolean indicating if the individual fits the problem constraints
+        pass
+    def fitness_score(self):
+        #Float value defining the fitness of the individual within the problem constraints. Higher is better
+        pass
+    def mutate(self):
+        #Modifies the individual in-place. Randomly alters the individuals properties.
+        pass
+    def breed(self,other):
+        #Returns a single offspring with traits inherited from both this object and the other object.
+        pass
+    def report(self):
+        #Returns a string describing the individual
+        pass
+
 def breed_population(population,mating_rate,litter_size,mutation_prob,generation):
+    '''
+    Function implementing genetic algorithm. Operates on collections of objects subclassed from the Individual class.
+    :param population: A collection of individuals
+    :param mating_rate: The frequency at which individuals mate.
+    :param litter_size: The number of offspring produced by each mating
+    :param mutation_prob: The probability of an offspring acquiring a mutation.
+    :param generation: The number of generations since the experiment began
+    :return:
+    '''
     children = []
     matings = []
     total_fitness = np.sum([x.fitness_score() for x in population])
@@ -31,6 +57,15 @@ def breed_population(population,mating_rate,litter_size,mutation_prob,generation
     return combined_population[:pop_size],matings
 
 def evolve_knapsack_population(population,mating_rate,litter_size,step,mutation_prob):
+    '''
+    Wrapper function on breed_population to solve the 0-1 Knapsack Problem
+    :param population:
+    :param mating_rate:
+    :param litter_size:
+    :param step:
+    :param mutation_prob:
+    :return:
+    '''
     generations = []
     population_record = [population]
     mean_values = []
@@ -65,6 +100,15 @@ def evolve_knapsack_population(population,mating_rate,litter_size,step,mutation_
 
 
 def evolve_numeric_optimizer_population(population,mating_rate,litter_size,step,mutation_prob):
+    '''
+    Wrapper function on breed_population to solve 2D function minimization problems.
+    :param population:
+    :param mating_rate:
+    :param litter_size:
+    :param step:
+    :param mutation_prob:
+    :return:
+    '''
     generations = []
     population_record = [population]
     xs = []
