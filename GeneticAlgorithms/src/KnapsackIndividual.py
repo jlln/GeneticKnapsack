@@ -59,7 +59,10 @@ class KnapsackIndividual(Individual):
                 self.items = [x for x in self.items if x != mut_element]
 
     def breed(self, partner):
+
         combined_genes = list(set(list(self.items) + list(partner.items)))
         offspring = KnapsackIndividual(combined_genes, self.max_weight)
         offspring.mutate(0.05)
+        if partner.items == self.items:
+            offspring.mutate(0.33)
         return offspring
